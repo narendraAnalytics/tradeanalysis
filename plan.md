@@ -1,6 +1,6 @@
 # Indian Trade Analysis Agent - Project Documentation
 
-## <¯ Project Overview
+## <ï¿½ Project Overview
 
 A cutting-edge **Generative UI Data Analysis Platform** that enables users to query India's import/export trade data through natural language, powered by **Google's Gemini 3 Pro Preview** (latest model). The platform generates interactive, real-time dashboards with comprehensive visualizations instead of simple text responses.
 
@@ -42,7 +42,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =€ Current Features (Implemented)
+## =ï¿½ Current Features (Implemented)
 
 ### Core Functionality
 -  Natural language query interface
@@ -61,7 +61,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 6. **Executive Summary** - AI-generated narrative analysis
 
 ### UI/UX Enhancements
--  Modern gradient design system (Indigo ’ Purple ’ Pink ’ Orange)
+-  Modern gradient design system (Indigo ï¿½ Purple ï¿½ Pink ï¿½ Orange)
 -  Animated sidebar with toggle functionality
 -  Vibrant message bubbles with gradient backgrounds
 -  Glow effects and smooth animations
@@ -79,7 +79,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## <¨ Recent Enhancements Completed
+## <ï¿½ Recent Enhancements Completed
 
 ### Phase 1: Advanced Visualizations (Completed)
 - Added Sector Pie Chart with animated segments
@@ -140,7 +140,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 #### 5. **Advanced Filtering System**
 - Filter by commodity/sector
-- Custom date range picker
+- Year  range picker
 - Regional breakdown (by country)
 - Import/Export toggle
 - **Tech**: React Hook Form, date-fns
@@ -240,7 +240,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =Ê Technical Stack
+## =ï¿½ Technical Stack
 
 ### Frontend
 - **Framework**: Next.js 16 (App Router)
@@ -266,7 +266,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## <“ Resume Talking Points
+## <ï¿½ Resume Talking Points
 
 ### For Technical Roles:
 
@@ -296,7 +296,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =à Recommended Next Steps for Maximum Impact
+## =ï¿½ Recommended Next Steps for Maximum Impact
 
 ### Phase 1: Make it Production-Ready (2-3 weeks)
 1. Add user authentication (NextAuth.js)
@@ -324,7 +324,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =È Potential Use Cases
+## =ï¿½ Potential Use Cases
 
 ### For Businesses:
 - Export/Import companies planning market strategy
@@ -346,7 +346,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## <¯ Competitive Advantages
+## <ï¿½ Competitive Advantages
 
 1. **Latest AI Model**: Using Gemini 3 Pro Preview before competitors
 2. **Generative UI**: Not just chatbot - creates interactive dashboards
@@ -358,7 +358,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =¡ Monetization Potential (Future)
+## =ï¿½ Monetization Potential (Future)
 
 1. **Freemium Model**:
    - Free: 10 queries/day
@@ -384,7 +384,7 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 
 ---
 
-## =Ý Project Metrics (Current)
+## =ï¿½ Project Metrics (Current)
 
 - **Lines of Code**: ~2,500+ (TypeScript/TSX)
 - **Components**: 15+ reusable components
@@ -440,11 +440,11 @@ This project demonstrates:
 **Featured Project** (top of projects section)
 
 ### LinkedIn Post Idea:
-"=€ Excited to share my latest project: An AI-powered Trade Analytics platform using Google's Gemini 3 Pro Preview! Built with Next.js 16, it transforms natural language queries into interactive dashboards with real-time data. Check out the live demo! #AI #WebDev #DataVisualization #NextJS"
+"=ï¿½ Excited to share my latest project: An AI-powered Trade Analytics platform using Google's Gemini 3 Pro Preview! Built with Next.js 16, it transforms natural language queries into interactive dashboards with real-time data. Check out the live demo! #AI #WebDev #DataVisualization #NextJS"
 
 ---
 
 **Last Updated**: January 2025
-**Status**:  Production-Ready Foundation | =§ Advanced Features in Roadmap
+**Status**:  Production-Ready Foundation | =ï¿½ Advanced Features in Roadmap
 **Maintainer**: [Your Name]
 **License**: MIT

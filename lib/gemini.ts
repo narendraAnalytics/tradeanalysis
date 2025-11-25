@@ -86,9 +86,37 @@ const jsonSchema = {
   required: ['summary', 'stats', 'chartData'],
 };
 
-export async function analyzeTradeQuery(query: string): Promise<TradeData> {
+export async function analyzeTradeQuery(query: string, filters?: any): Promise<TradeData> {
   try {
     const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+    // Build filter context string
+    let filterContext = '';
+    if (filters) {
+      const filterParts = [];
+
+      if (filters.sectors && filters.sectors.length > 0) {
+        filterParts.push(`Focus on these sectors: ${filters.sectors.join(', ')}`);
+      }
+
+      if (filters.countries && filters.countries.length > 0) {
+        filterParts.push(`Focus on trade with these countries/regions: ${filters.countries.join(', ')}`);
+      }
+
+      if (filters.tradeType && filters.tradeType !== 'both') {
+        filterParts.push(`Focus ONLY on ${filters.tradeType} (not ${filters.tradeType === 'imports' ? 'exports' : 'imports'})`);
+      }
+
+      if (filters.yearFrom && filters.yearTo) {
+        if (filters.yearFrom !== '2010' || filters.yearTo !== '2025') {
+          filterParts.push(`Analyze data ONLY for the year range ${filters.yearFrom} to ${filters.yearTo}`);
+        }
+      }
+
+      if (filterParts.length > 0) {
+        filterContext = `\n\nAPPLIED FILTERS (MUST RESPECT THESE):\n${filterParts.map((f, i) => `${i + 1}. ${f}`).join('\n')}\n`;
+      }
+    }
 
     const result = await genAI.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -101,7 +129,7 @@ export async function analyzeTradeQuery(query: string): Promise<TradeData> {
                 You are an expert Indian Trade Analyst with deep knowledge of global economics, trade policies, and India's economic history.
 
                 QUERY: "${query}"
-
+                ${filterContext}
                 INSTRUCTIONS:
                 1. Use the google_search tool extensively to find the most recent, accurate, and authoritative data for India's trade statistics (2010-2025).
                    - Search for official sources: Ministry of Commerce, RBI, World Bank, IMF, UNCTAD, etc.

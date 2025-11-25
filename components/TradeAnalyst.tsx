@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useActionState, useRef, useEffect, useOptimistic, startTransition, useState } from 'react';
-import { Send, Bot, User, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Send, Bot, User, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
 import { analyzeTradeData, ChatState, Message } from '@/app/actions';
 import { TradeDashboard } from './dashboard/TradeDashboard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TradeData } from '@/lib/gemini';
 import Image from 'next/image';
+import { FilterPanel, FilterValues } from './filters/FilterPanel';
 
 const initialState: ChatState = {
     messages: [{
@@ -25,6 +26,15 @@ export function TradeAnalyst() {
 
     const [activeData, setActiveData] = useState<TradeData | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+    const [filters, setFilters] = useState<FilterValues>({
+        sectors: [],
+        yearFrom: '2010',
+        yearTo: '2025',
+        countries: [],
+        tradeType: 'both',
+    });
+    const [appliedFilters, setAppliedFilters] = useState<FilterValues | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -40,9 +50,43 @@ export function TradeAnalyst() {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [optimisticMessages]);
 
+    const handleApplyFilters = () => {
+        setAppliedFilters(filters);
+        setFilterPanelOpen(false);
+    };
+
+    const handleResetFilters = () => {
+        const defaultFilters: FilterValues = {
+            sectors: [],
+            yearFrom: '2010',
+            yearTo: '2025',
+            countries: [],
+            tradeType: 'both',
+        };
+        setFilters(defaultFilters);
+        setAppliedFilters(null);
+    };
+
+    const removeFilter = (filterType: 'sector' | 'country', value: string) => {
+        if (filterType === 'sector') {
+            const newFilters = { ...filters, sectors: filters.sectors.filter(s => s !== value) };
+            setFilters(newFilters);
+            setAppliedFilters(newFilters);
+        } else {
+            const newFilters = { ...filters, countries: filters.countries.filter(c => c !== value) };
+            setFilters(newFilters);
+            setAppliedFilters(newFilters);
+        }
+    };
+
     const handleSubmit = (formData: FormData) => {
         const query = formData.get('query') as string;
         if (!query.trim()) return;
+
+        // Append filter data to formData if filters are applied
+        if (appliedFilters) {
+            formData.append('filters', JSON.stringify(appliedFilters));
+        }
 
         startTransition(() => {
             addOptimisticMessage({
@@ -62,7 +106,7 @@ export function TradeAnalyst() {
     };
 
     return (
-        <div className="flex h-screen bg-background overflow-hidden font-sans text-foreground selection:bg-primary/20">
+        <div className="flex h-screen bg-background overflow-hidden font-roboto text-foreground selection:bg-primary/20">
             {/* Left Sidebar - Chat Interface */}
             <motion.div
                 initial={false}
@@ -109,7 +153,7 @@ export function TradeAnalyst() {
                                 w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 mt-1 shadow-lg
                                 ${msg.role === 'assistant'
                                     ? 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white shadow-indigo-500/30 glow-effect'
-                                    : 'bg-gradient-to-br from-slate-700 to-slate-900 text-white shadow-slate-900/20'}
+                                    : 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/20'}
                             `}>
                                 {msg.role === 'assistant' ? <Bot size={20} strokeWidth={2.5} /> : <User size={20} strokeWidth={2.5} />}
                             </div>
@@ -163,8 +207,96 @@ export function TradeAnalyst() {
                     <div ref={bottomRef} />
                 </div>
 
+                {/* Filter Panel */}
+                <FilterPanel
+                    isOpen={filterPanelOpen}
+                    filters={filters}
+                    onFilterChange={setFilters}
+                    onApply={handleApplyFilters}
+                    onReset={handleResetFilters}
+                />
+
+                {/* Active Filters Display */}
+                {appliedFilters && (appliedFilters.sectors.length > 0 || appliedFilters.countries.length > 0 || appliedFilters.tradeType !== 'both' || appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025') && (
+                    <div className="px-5 py-3 bg-gradient-to-r from-orange-50/80 to-amber-50/80 border-t border-orange-200/50 flex flex-wrap gap-2 items-center">
+                        <span className="text-xs font-bold text-slate-600">Active Filters:</span>
+                        {appliedFilters.sectors.map(sector => (
+                            <motion.div
+                                key={sector}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 text-white text-xs font-semibold shadow-sm"
+                            >
+                                {sector}
+                                <button onClick={() => removeFilter('sector', sector)} className="hover:bg-white/20 rounded p-0.5">
+                                    <X size={12} />
+                                </button>
+                            </motion.div>
+                        ))}
+                        {appliedFilters.countries.map(country => (
+                            <motion.div
+                                key={country}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-semibold shadow-sm"
+                            >
+                                {country}
+                                <button onClick={() => removeFilter('country', country)} className="hover:bg-white/20 rounded p-0.5">
+                                    <X size={12} />
+                                </button>
+                            </motion.div>
+                        ))}
+                        {appliedFilters.tradeType !== 'both' && (
+                            <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="px-2.5 py-1 rounded-lg bg-emerald-500 text-white text-xs font-semibold shadow-sm"
+                            >
+                                {appliedFilters.tradeType.charAt(0).toUpperCase() + appliedFilters.tradeType.slice(1)} Only
+                            </motion.div>
+                        )}
+                        {(appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025') && (
+                            <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="px-2.5 py-1 rounded-lg bg-blue-500 text-white text-xs font-semibold shadow-sm"
+                            >
+                                {appliedFilters.yearFrom} - {appliedFilters.yearTo}
+                            </motion.div>
+                        )}
+                        <button
+                            onClick={handleResetFilters}
+                            className="ml-auto text-xs font-bold text-slate-500 hover:text-orange-600 transition-colors"
+                        >
+                            Clear All
+                        </button>
+                    </div>
+                )}
+
                 {/* Modern Input Area */}
                 <div className="relative p-5 bg-gradient-to-r from-white/70 via-indigo-50/50 to-purple-50/50 backdrop-blur-md border-t border-indigo-100">
+                    {/* Filter Toggle Button */}
+                    <div className="mb-3 flex justify-end">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setFilterPanelOpen(!filterPanelOpen)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs shadow-md transition-all ${
+                                filterPanelOpen
+                                    ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/30'
+                                    : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-orange-300'
+                            }`}
+                        >
+                            <SlidersHorizontal size={16} strokeWidth={2.5} />
+                            Advanced Filters
+                            {appliedFilters && (appliedFilters.sectors.length > 0 || appliedFilters.countries.length > 0 || appliedFilters.tradeType !== 'both' || appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025') && (
+                                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/30 text-xs font-bold">
+                                    {(appliedFilters.sectors.length + appliedFilters.countries.length + (appliedFilters.tradeType !== 'both' ? 1 : 0) + (appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025' ? 1 : 0))}
+                                </span>
+                            )}
+                        </motion.button>
+                    </div>
+
                     <form ref={formRef} action={handleSubmit} className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
                         <input
