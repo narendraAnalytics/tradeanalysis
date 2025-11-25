@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useActionState, useRef, useEffect, useOptimistic, startTransition, useState } from 'react';
-import { Send, Bot, User, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
-import { analyzeTradeData, ChatState, Message } from '@/app/actions';
+import { Send, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X, Loader2 } from 'lucide-react';
+import { analyzeTradeData, ChatState, Message, generateQueryFromFiltersAction } from '@/app/actions';
 import { TradeDashboard } from './dashboard/TradeDashboard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TradeData } from '@/lib/gemini';
 import Image from 'next/image';
 import { FilterPanel, FilterValues } from './filters/FilterPanel';
+import { Tooltip } from './ui/Tooltip';
 
 const initialState: ChatState = {
     messages: [{
@@ -35,7 +36,9 @@ export function TradeAnalyst() {
         tradeType: 'both',
     });
     const [appliedFilters, setAppliedFilters] = useState<FilterValues | null>(null);
+    const [isGeneratingQuery, setIsGeneratingQuery] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     // Update active data when a new message with data arrives
@@ -50,9 +53,10 @@ export function TradeAnalyst() {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [optimisticMessages]);
 
-    const handleApplyFilters = () => {
-        setAppliedFilters(filters);
-        setFilterPanelOpen(false);
+    // Auto-apply filters whenever they change
+    const handleFilterChange = (newFilters: FilterValues) => {
+        setFilters(newFilters);
+        setAppliedFilters(newFilters);
     };
 
     const handleResetFilters = () => {
@@ -64,18 +68,55 @@ export function TradeAnalyst() {
             tradeType: 'both',
         };
         setFilters(defaultFilters);
-        setAppliedFilters(null);
+        setAppliedFilters(defaultFilters);
+        if (inputRef.current) {
+            inputRef.current.value = '';
+        }
     };
 
     const removeFilter = (filterType: 'sector' | 'country', value: string) => {
+        let newFilters: FilterValues;
         if (filterType === 'sector') {
-            const newFilters = { ...filters, sectors: filters.sectors.filter(s => s !== value) };
-            setFilters(newFilters);
-            setAppliedFilters(newFilters);
+            newFilters = { ...filters, sectors: filters.sectors.filter(s => s !== value) };
         } else {
-            const newFilters = { ...filters, countries: filters.countries.filter(c => c !== value) };
-            setFilters(newFilters);
-            setAppliedFilters(newFilters);
+            newFilters = { ...filters, countries: filters.countries.filter(c => c !== value) };
+        }
+        setFilters(newFilters);
+        setAppliedFilters(newFilters);
+    };
+
+    // Toggle filter panel and generate query when closing
+    const toggleFilterPanel = async () => {
+        // If panel is open and we're closing it
+        if (filterPanelOpen) {
+            setFilterPanelOpen(false);
+
+            // Check if any filters are active
+            const hasActiveFilters =
+                filters.sectors.length > 0 ||
+                filters.countries.length > 0 ||
+                filters.tradeType !== 'both' ||
+                filters.yearFrom !== '2010' ||
+                filters.yearTo !== '2025';
+
+            if (hasActiveFilters) {
+                // Generate query from filters
+                setIsGeneratingQuery(true);
+                try {
+                    const generatedQuery = await generateQueryFromFiltersAction(filters);
+                    if (inputRef.current) {
+                        inputRef.current.value = generatedQuery;
+                        inputRef.current.focus();
+                    }
+                } catch (error) {
+                    console.error('Error generating query:', error);
+                } finally {
+                    setIsGeneratingQuery(false);
+                }
+            }
+        } else {
+            // Just open the panel
+            setFilterPanelOpen(true);
         }
     };
 
@@ -155,7 +196,11 @@ export function TradeAnalyst() {
                                     ? 'bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white shadow-indigo-500/30 glow-effect'
                                     : 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/20'}
                             `}>
-                                {msg.role === 'assistant' ? <Bot size={20} strokeWidth={2.5} /> : <User size={20} strokeWidth={2.5} />}
+                                {msg.role === 'assistant' ? (
+                                    <Image src="/images/tradeicon.png" alt="Trade AI" width={20} height={20} className="opacity-75" />
+                                ) : (
+                                    <Image src="/images/rupee.png" alt="User" width={20} height={20} className="opacity-75" />
+                                )}
                             </div>
 
                             <div className={`flex flex-col gap-2 max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
@@ -194,7 +239,7 @@ export function TradeAnalyst() {
                             className="flex gap-3.5"
                         >
                             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/30 glow-effect">
-                                <Bot size={20} strokeWidth={2.5} className="animate-pulse" />
+                                <Image src="/images/tradeicon.png" alt="Trade AI" width={20} height={20} className="opacity-75 animate-pulse" />
                             </div>
                             <div className="px-5 py-3.5 rounded-2xl bg-white/90 border border-indigo-100 shadow-lg rounded-tl-md text-sm text-slate-600 flex items-center gap-2.5">
                                 <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -211,8 +256,7 @@ export function TradeAnalyst() {
                 <FilterPanel
                     isOpen={filterPanelOpen}
                     filters={filters}
-                    onFilterChange={setFilters}
-                    onApply={handleApplyFilters}
+                    onFilterChange={handleFilterChange}
                     onReset={handleResetFilters}
                 />
 
@@ -277,29 +321,45 @@ export function TradeAnalyst() {
                 <div className="relative p-5 bg-gradient-to-r from-white/70 via-indigo-50/50 to-purple-50/50 backdrop-blur-md border-t border-indigo-100">
                     {/* Filter Toggle Button */}
                     <div className="mb-3 flex justify-end">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setFilterPanelOpen(!filterPanelOpen)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs shadow-md transition-all ${
-                                filterPanelOpen
-                                    ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/30'
-                                    : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-orange-300'
-                            }`}
+                        <Tooltip
+                            content="Select filters and close panel to auto-generate query"
+                            disabled={isGeneratingQuery || filterPanelOpen}
                         >
-                            <SlidersHorizontal size={16} strokeWidth={2.5} />
-                            Advanced Filters
-                            {appliedFilters && (appliedFilters.sectors.length > 0 || appliedFilters.countries.length > 0 || appliedFilters.tradeType !== 'both' || appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025') && (
-                                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/30 text-xs font-bold">
-                                    {(appliedFilters.sectors.length + appliedFilters.countries.length + (appliedFilters.tradeType !== 'both' ? 1 : 0) + (appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025' ? 1 : 0))}
-                                </span>
-                            )}
-                        </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={toggleFilterPanel}
+                                disabled={isGeneratingQuery}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                                    filterPanelOpen
+                                        ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/30'
+                                        : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-orange-300'
+                                }`}
+                            >
+                                {isGeneratingQuery ? (
+                                    <>
+                                        <Loader2 size={16} className="animate-spin" strokeWidth={2.5} />
+                                        Generating...
+                                    </>
+                                ) : (
+                                    <>
+                                        <SlidersHorizontal size={16} strokeWidth={2.5} />
+                                        Advanced Filters
+                                        {appliedFilters && (appliedFilters.sectors.length > 0 || appliedFilters.countries.length > 0 || appliedFilters.tradeType !== 'both' || appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025') && (
+                                            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-white/30 text-xs font-bold">
+                                                {(appliedFilters.sectors.length + appliedFilters.countries.length + (appliedFilters.tradeType !== 'both' ? 1 : 0) + (appliedFilters.yearFrom !== '2010' || appliedFilters.yearTo !== '2025' ? 1 : 0))}
+                                            </span>
+                                        )}
+                                    </>
+                                )}
+                            </motion.button>
+                        </Tooltip>
                     </div>
 
                     <form ref={formRef} action={handleSubmit} className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
                         <input
+                            ref={inputRef}
                             name="query"
                             type="text"
                             placeholder="Ask about trade data..."

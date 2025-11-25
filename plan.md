@@ -138,12 +138,15 @@ A cutting-edge **Generative UI Data Analysis Platform** that enables users to qu
 - Usage analytics
 - **Tech**: NextAuth.js, JWT, OAuth providers
 
-#### 5. **Advanced Filtering System**
-- Filter by commodity/sector
-- Year  range picker
-- Regional breakdown (by country)
-- Import/Export toggle
-- **Tech**: React Hook Form, date-fns
+#### 5. **Advanced Filtering System** ✔ (Completed)
+- ✔ Filter by commodity/sector (10 major sectors)
+- ✔ Year range picker (2010-2025)
+- ✔ Regional breakdown (by country - 10 major trading partners)
+- ✔ Import/Export/Both toggle
+- ✔ Auto-generate natural language queries with Gemini Flash
+- ✔ Real-time filter application with visual chips
+- ✔ Collapsible filter panel with gradient design
+- **Tech**: Custom React components, Framer Motion, Gemini Flash API, TypeScript
 
 #### 6. **AI-Powered Insights & Predictions**
 - Trend forecasting (next 1-3 years)

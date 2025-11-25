@@ -1,6 +1,15 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { z } from 'zod';
 
+// Filter values type (matching FilterPanel)
+export type FilterValues = {
+  sectors: string[];
+  yearFrom: string;
+  yearTo: string;
+  countries: string[];
+  tradeType: 'imports' | 'exports' | 'both';
+};
+
 // Define the schema for the trade data analysis (keeping Zod for type inference)
 export const TradeDataSchema = z.object({
   summary: z.string().describe('A brief executive summary of the trade data'),
@@ -247,5 +256,94 @@ export async function analyzeTradeQuery(query: string, filters?: any): Promise<T
         { year: "2024", change: 5.9 },
       ],
     };
+  }
+}
+
+/**
+ * Generate a natural language query from filter selections using Gemini Flash
+ */
+export async function generateQueryFromFilters(filters: FilterValues): Promise<string> {
+  try {
+    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+    // Build filter description
+    const filterParts = [];
+
+    if (filters.sectors && filters.sectors.length > 0) {
+      filterParts.push(`Sectors: ${filters.sectors.join(', ')}`);
+    }
+
+    if (filters.countries && filters.countries.length > 0) {
+      filterParts.push(`Countries: ${filters.countries.join(', ')}`);
+    }
+
+    if (filters.tradeType && filters.tradeType !== 'both') {
+      filterParts.push(`Trade Type: ${filters.tradeType}`);
+    }
+
+    if (filters.yearFrom && filters.yearTo) {
+      filterParts.push(`Year Range: ${filters.yearFrom} to ${filters.yearTo}`);
+    }
+
+    const filterDescription = filterParts.join('\n');
+
+    const result = await genAI.models.generateContent({
+      model: 'gemini-flash-latest',
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: `You are a query generator for an India trade analysis system.
+
+Convert the following filter selections into a natural, concise query for analyzing India's trade data.
+
+FILTER SELECTIONS:
+${filterDescription}
+
+Generate a clear, natural language query (10-20 words) that a user would ask to analyze this data.
+Examples:
+- "Show me petroleum exports to USA from 2018 to 2022"
+- "Analyze electronics and machinery imports from China"
+- "What are India's pharmaceutical exports to Germany between 2015 and 2020?"
+
+Only return the query text, nothing else.`
+            }
+          ]
+        }
+      ],
+      config: {
+        thinkingConfig: {
+          thinkingBudget: -1,
+        },
+      }
+    });
+
+    const queryText = result.text?.trim() || '';
+    return queryText;
+
+  } catch (error) {
+    console.error("Error generating query from filters:", error);
+
+    // Fallback: Create a simple query from filter values
+    const parts = [];
+
+    if (filters.sectors.length > 0) {
+      parts.push(filters.sectors.join(', '));
+    }
+
+    if (filters.tradeType !== 'both') {
+      parts.push(filters.tradeType);
+    }
+
+    if (filters.countries.length > 0) {
+      parts.push(`to/from ${filters.countries.join(', ')}`);
+    }
+
+    if (filters.yearFrom !== '2010' || filters.yearTo !== '2025') {
+      parts.push(`${filters.yearFrom}-${filters.yearTo}`);
+    }
+
+    return `Show me ${parts.join(' ')}`;
   }
 }

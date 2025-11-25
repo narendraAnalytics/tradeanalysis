@@ -1,6 +1,6 @@
 "use server";
 
-import { analyzeTradeQuery, TradeData } from "@/lib/gemini";
+import { analyzeTradeQuery, TradeData, generateQueryFromFilters, FilterValues } from "@/lib/gemini";
 import { nanoid } from "nanoid";
 
 export type Message = {
@@ -64,5 +64,18 @@ export async function analyzeTradeData(prevState: ChatState, formData: FormData)
         return {
             messages: [...prevState.messages, userMessage, errorMessage],
         };
+    }
+}
+
+/**
+ * Server action to generate a natural language query from filter selections
+ */
+export async function generateQueryFromFiltersAction(filters: FilterValues): Promise<string> {
+    try {
+        const query = await generateQueryFromFilters(filters);
+        return query;
+    } catch (error) {
+        console.error("Error in generateQueryFromFiltersAction:", error);
+        return "Show me India's trade data";
     }
 }

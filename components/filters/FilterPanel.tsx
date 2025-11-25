@@ -16,7 +16,6 @@ type FilterPanelProps = {
     isOpen: boolean;
     filters: FilterValues;
     onFilterChange: (filters: FilterValues) => void;
-    onApply: () => void;
     onReset: () => void;
 };
 
@@ -48,7 +47,7 @@ const COUNTRIES = [
 
 const YEARS = Array.from({ length: 16 }, (_, i) => (2010 + i).toString());
 
-export function FilterPanel({ isOpen, filters, onFilterChange, onApply, onReset }: FilterPanelProps) {
+export function FilterPanel({ isOpen, filters, onFilterChange, onReset }: FilterPanelProps) {
     const toggleSector = (sector: string) => {
         const newSectors = filters.sectors.includes(sector)
             ? filters.sectors.filter(s => s !== sector)
@@ -174,17 +173,9 @@ export function FilterPanel({ isOpen, filters, onFilterChange, onApply, onReset 
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={onReset}
-                                className="flex-1 px-4 py-3 rounded-xl bg-white text-slate-600 border-2 border-slate-200 hover:border-slate-300 font-bold text-sm transition-all shadow-sm"
+                                className="w-full px-4 py-3 rounded-xl bg-white text-slate-600 border-2 border-slate-200 hover:border-orange-300 hover:text-orange-600 font-bold text-sm transition-all shadow-sm"
                             >
                                 Reset Filters
-                            </motion.button>
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={onApply}
-                                className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 text-white font-bold text-sm shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all"
-                            >
-                                Apply Filters
                             </motion.button>
                         </div>
                     </div>

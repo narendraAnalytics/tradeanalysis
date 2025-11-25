@@ -18,6 +18,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "India Trade Agent",
   description: "AI-Powered Trade Analysis Dashboard",
+  icons: {
+    icon: '/images/rupee.png',
+  },
 };
 
 export default function RootLayout({
