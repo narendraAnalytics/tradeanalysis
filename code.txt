@@ -107,3 +107,38 @@ main();
      Add filters, custom date range selection, and commodity-specific analysis
   3. Export & sharing features (PDF reports, CSV downloads, share links)
      Enable users to export dashboards as PDFs, download data as CSV, or share analysis via links
+
+
+
+      📊 What the Pie Chart Will Display:
+
+  Most likely: The pie chart will show ONE aggregated slice for all Pharmaceuticals & Healthcare items combined.
+
+  Here's what happens:
+
+  1. Filter Selection → When you select "Pharmaceuticals & Healthcare", all 6 sub-items get added:
+    - Drug Formulations (Generics)
+    - Active Pharmaceutical Ingredients (APIs)
+    - Vaccines (Human & Veterinary)
+    - Antibiotics
+    - Ayurvedic & Herbal Products
+    - Surgicals & Medical Consumables
+  2. Sent to Gemini AI (gemini.ts:108) →
+  "Focus on these sectors: Drug Formulations (Generics), Active Pharmaceutical Ingredients (APIs), ..."
+  3. AI Analyzes & Returns Data → Gemini searches for trade data and returns the topSectors array with names like:
+    - { name: "Pharmaceuticals", value: 60, percentage: 8 }
+  4. Pie Chart Renders → Shows one slice labeled "Pharmaceuticals" (or "Pharmaceuticals & Healthcare") representing the combined total     
+  of all 6 sub-items
+
+  Why ONE slice and not six?
+
+  - The AI aggregates related items into broader categories for cleaner visualization
+  - The prompt (line 160) instructs: "Highlight key sectors: Electronics, Petroleum, Gems, Pharma..." - suggesting broad categories        
+  - The pie chart typically shows top 5-6 sectors total, so it won't break down every sub-item
+
+  If you want individual sub-item slices:
+
+  You would need to modify the AI prompt in gemini.ts to specifically request breakdown by the exact filter items instead of
+  aggregating them. But that might make the pie chart cluttered with too many small slices!
+
+  Current behavior = cleaner, aggregated view ✅

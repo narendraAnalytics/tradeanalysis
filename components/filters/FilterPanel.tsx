@@ -1,8 +1,8 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check } from 'lucide-react';
+import { X, Check, ChevronDown, ChevronRight } from 'lucide-react';
 
 export type FilterValues = {
     sectors: string[];
@@ -19,17 +19,114 @@ type FilterPanelProps = {
     onReset: () => void;
 };
 
-const SECTORS = [
-    'Electronics',
-    'Petroleum & Oil',
-    'Gems & Jewelry',
-    'Pharmaceuticals',
-    'Machinery',
-    'Chemicals',
-    'Agriculture',
-    'Textiles',
-    'Automobiles',
-    'Iron & Steel',
+type SectorItem = {
+    name: string;
+    children?: string[];
+};
+
+const SECTORS: SectorItem[] = [
+    { 
+        name: 'Energy (Oil, Gas & Coal)',
+        children: [
+            'Crude Oil',
+            'Petroleum Products',
+            'Liquefied Natural Gas (LNG)',
+            'Thermal Coal',
+            'Coking Coal'
+        ]
+    
+    },
+    {
+        name: 'Pharmaceuticals & Healthcare',
+        children: [
+            'Drug Formulations (Generics)',
+            'Active Pharmaceutical Ingredients (APIs)',
+            'Vaccines (Human & Veterinary)',
+            'Antibiotics',
+            'Ayurvedic & Herbal Products',
+            'Surgicals & Medical Consumables'
+        ]
+    },
+    { 
+        name: 'Engineering & Machinery',
+        children: [
+            'Agricultural Machinery (Tractors)',
+            'Textile Machinery',
+            'Construction & Mining Equipment',
+            'Industrial Boilers & Turbines',
+            'Machine Tools (CNC & Lathes)',
+            'Pumps & Compressors'
+        ]
+    },
+    { 
+        name: 'Chemicals & Petrochemicals',
+        children: [
+            'Organic Chemicals',
+            'Agrochemicals (Pesticides)',
+            'Dyes & Pigments',
+            'Fertilizers (Urea/DAP)',
+            'Man-made Polymers (Plastic)',
+            'Specialty Chemicals'
+
+        ]   
+    
+    },
+    { 
+        name: 'Textiles & Apparel',
+        children: [
+            'Ready-made Garments (RMG)',
+            'Cotton Yarn & Fabrics',
+            'Man-made Filaments (Polyester)',
+            'Handloom & Handicrafts',
+            'Carpets & Floor Coverings',
+            'Technical Textiles'
+        ]
+     },
+    { 
+        name: 'Iron & Steel' ,
+        children: [
+            'Iron Ore & Concentrates',
+            'Steel Scrap',
+            'Hot Rolled (HR) Coils/Sheets',
+            'Stainless Steel Products',
+            'Ferro Alloys',
+            'Bars, Rods & TMT Bars'
+        ]
+    
+    },
+    {
+        name: 'Agri & Marine',
+        children: [
+            'Basmati Rice',
+            'Marine Products (Shrimp)',
+            'Spices',
+            'Sugar',
+            'Tea (Darjeeling/Assam)'
+        ]
+    },
+    {
+        name: 'Electronics System Design & Mfg',
+        children: [
+            'Mobile Phones (Smartphones)',
+            'Solar Panels & Modules',
+            'Lithium-Ion Batteries',
+            'Electronic Integrated Circuits',
+            'Laptops & Computers',
+            'Printed Circuit Boards (PCBs)',
+            'Consumer Electronics (TVs/Audio)',
+            'Telecom Instruments'
+        ]
+    },
+    {
+        name: 'Luxury & Lifestyle',
+        children: [
+            'Premium Leather Goods',
+            'Handcrafted Jewelry & Gems',
+            'Designer Textiles & Fashion',
+            'Cosmetics & Beauty Products',
+            'Fine Wines & Spirits'
+        ]
+    },
 ];
 
 const COUNTRIES = [
@@ -48,11 +145,47 @@ const COUNTRIES = [
 const YEARS = Array.from({ length: 16 }, (_, i) => (2010 + i).toString());
 
 export function FilterPanel({ isOpen, filters, onFilterChange, onReset }: FilterPanelProps) {
-    const toggleSector = (sector: string) => {
-        const newSectors = filters.sectors.includes(sector)
-            ? filters.sectors.filter(s => s !== sector)
-            : [...filters.sectors, sector];
-        onFilterChange({ ...filters, sectors: newSectors });
+    const [expandedSectors, setExpandedSectors] = useState<Set<string>>(new Set());
+
+    const toggleExpand = (sectorName: string) => {
+        const newExpanded = new Set(expandedSectors);
+        if (newExpanded.has(sectorName)) {
+            newExpanded.delete(sectorName);
+        } else {
+            newExpanded.add(sectorName);
+        }
+        setExpandedSectors(newExpanded);
+    };
+
+    const toggleSector = (sector: string, children?: string[]) => {
+        if (children) {
+            // Parent category clicked - toggle all children
+            const allChildrenSelected = children.every(child => filters.sectors.includes(child));
+            let newSectors: string[];
+
+            if (allChildrenSelected) {
+                // Deselect all children
+                newSectors = filters.sectors.filter(s => !children.includes(s));
+            } else {
+                // Select all children (remove duplicates)
+                const childrenToAdd = children.filter(child => !filters.sectors.includes(child));
+                newSectors = [...filters.sectors, ...childrenToAdd];
+            }
+            onFilterChange({ ...filters, sectors: newSectors });
+        } else {
+            // Individual sector clicked
+            const newSectors = filters.sectors.includes(sector)
+                ? filters.sectors.filter(s => s !== sector)
+                : [...filters.sectors, sector];
+            onFilterChange({ ...filters, sectors: newSectors });
+        }
+    };
+
+    const isSectorSelected = (sectorName: string, children?: string[]): boolean => {
+        if (children) {
+            return children.every(child => filters.sectors.includes(child));
+        }
+        return filters.sectors.includes(sectorName);
     };
 
     const toggleCountry = (country: string) => {
@@ -72,7 +205,7 @@ export function FilterPanel({ isOpen, filters, onFilterChange, onReset }: Filter
                     transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     className="overflow-hidden"
                 >
-                    <div className="p-5 bg-gradient-to-br from-white/95 via-orange-50/50 to-amber-50/50 backdrop-blur-md border-t border-b border-orange-200/50 space-y-4">
+                    <div className="p-5 bg-gradient-to-br from-white/95 via-orange-50/50 to-amber-50/50 backdrop-blur-md border-t border-b border-orange-200/50 space-y-4 max-h-[70vh] overflow-y-auto">
                         {/* Trade Type Toggle */}
                         <div>
                             <label className="text-xs font-bold text-slate-700 mb-2 block">Trade Type</label>
@@ -126,20 +259,62 @@ export function FilterPanel({ isOpen, filters, onFilterChange, onReset }: Filter
                             <label className="text-xs font-bold text-slate-700 mb-2 block">
                                 Sectors/Commodities {filters.sectors.length > 0 && `(${filters.sectors.length} selected)`}
                             </label>
-                            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 bg-white/50 rounded-xl border border-slate-200">
+                            <div className="space-y-2 max-h-60 overflow-y-auto p-2 bg-white/50 rounded-xl border border-slate-200">
                                 {SECTORS.map((sector) => (
-                                    <button
-                                        key={sector}
-                                        onClick={() => toggleSector(sector)}
-                                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                                            filters.sectors.includes(sector)
-                                                ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-md'
-                                                : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-300'
-                                        }`}
-                                    >
-                                        {filters.sectors.includes(sector) && <Check size={14} strokeWidth={3} />}
-                                        <span className="truncate">{sector}</span>
-                                    </button>
+                                    <div key={sector.name}>
+                                        {/* Parent/Main Sector Button */}
+                                        <div className="flex gap-1">
+                                            {sector.children && (
+                                                <button
+                                                    onClick={() => toggleExpand(sector.name)}
+                                                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                                                >
+                                                    {expandedSectors.has(sector.name) ? (
+                                                        <ChevronDown size={14} strokeWidth={2.5} className="text-slate-600" />
+                                                    ) : (
+                                                        <ChevronRight size={14} strokeWidth={2.5} className="text-slate-600" />
+                                                    )}
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={() => toggleSector(sector.name, sector.children)}
+                                                className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                                                    isSectorSelected(sector.name, sector.children)
+                                                        ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-md'
+                                                        : 'bg-white text-slate-600 border border-slate-200 hover:border-orange-300'
+                                                } ${!sector.children ? 'ml-0' : ''}`}
+                                            >
+                                                {isSectorSelected(sector.name, sector.children) && <Check size={14} strokeWidth={3} />}
+                                                <span className="truncate">{sector.name}</span>
+                                                {sector.children && <span className="text-[10px] opacity-70">({sector.children.length})</span>}
+                                            </button>
+                                        </div>
+
+                                        {/* Children/Sub-items */}
+                                        {sector.children && expandedSectors.has(sector.name) && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                className="ml-8 mt-1 space-y-1"
+                                            >
+                                                {sector.children.map((child) => (
+                                                    <button
+                                                        key={child}
+                                                        onClick={() => toggleSector(child)}
+                                                        className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                                            filters.sectors.includes(child)
+                                                                ? 'bg-gradient-to-br from-orange-400 to-amber-500 text-white shadow-sm'
+                                                                : 'bg-white/80 text-slate-600 border border-slate-200 hover:border-orange-200'
+                                                        }`}
+                                                    >
+                                                        {filters.sectors.includes(child) && <Check size={12} strokeWidth={3} />}
+                                                        <span className="truncate text-left">{child}</span>
+                                                    </button>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
                         </div>
