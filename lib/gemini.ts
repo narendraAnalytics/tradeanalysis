@@ -14,6 +14,17 @@ export const TradeDataSchema = z.object({
     exports: z.number().describe('Export value in USD Billions'),
     imports: z.number().describe('Import value in USD Billions'),
   })).describe('Yearly data for the last 15 years'),
+  // Optional fields for enhanced visualizations
+  topSectors: z.array(z.object({
+    name: z.string().describe('Sector name (e.g., Electronics, Oil, Pharma)'),
+    value: z.number().describe('Trade value in USD Billions'),
+    percentage: z.number().describe('Percentage of total trade'),
+  })).optional().describe('Top 5-6 sectors by trade volume'),
+  growthRate: z.string().optional().describe('Overall trade growth rate (e.g., "+12.5%")'),
+  yearOverYearChange: z.array(z.object({
+    year: z.string(),
+    change: z.number().describe('Percentage change from previous year'),
+  })).optional().describe('Year-over-year growth rates'),
 });
 
 export type TradeData = z.infer<typeof TradeDataSchema>;
@@ -44,6 +55,33 @@ const jsonSchema = {
         required: ['year', 'exports', 'imports'],
       },
     },
+    // Optional fields for enhanced visualizations
+    topSectors: {
+      type: Type.ARRAY,
+      description: 'Top 5-6 sectors by trade volume',
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING, description: 'Sector name (e.g., Electronics, Oil, Pharma)' },
+          value: { type: Type.NUMBER, description: 'Trade value in USD Billions' },
+          percentage: { type: Type.NUMBER, description: 'Percentage of total trade' },
+        },
+        required: ['name', 'value', 'percentage'],
+      },
+    },
+    growthRate: { type: Type.STRING, description: 'Overall trade growth rate (e.g., "+12.5%")' },
+    yearOverYearChange: {
+      type: Type.ARRAY,
+      description: 'Year-over-year growth rates',
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          year: { type: Type.STRING },
+          change: { type: Type.NUMBER, description: 'Percentage change from previous year' },
+        },
+        required: ['year', 'change'],
+      },
+    },
   },
   required: ['summary', 'stats', 'chartData'],
 };
@@ -60,20 +98,45 @@ export async function analyzeTradeQuery(query: string): Promise<TradeData> {
           parts: [
             {
               text: `
-                You are an expert Indian Trade Analyst. 
-                Analyze the following query about India's trade: "${query}".
-                
-                Use the google_search tool to find the most recent and accurate data for India's trade (Imports/Exports) over the last 15 years (2010-2025).
-                Look for specific data points: total volume, peak year, balance, and yearly breakdown.
-                
-                Provide a realistic analysis based on historical trends.
-                Ensure the data is consistent and highlights key trends.
-                The 'balance' should clearly state if it is a Surplus or Deficit.
+                You are an expert Indian Trade Analyst with deep knowledge of global economics, trade policies, and India's economic history.
 
-                CRITICAL: In the 'summary', provide a detailed executive summary (approx 3-4 sentences).
-                - Explain *why* certain years had peaks or drops (e.g., global recession, policy changes, specific sector growth).
-                - Mention key contributing sectors (e.g., Oil, Electronics, Pharma) or global events affecting trade.
-                - Connect the data points to tell a coherent story about India's trade evolution.
+                QUERY: "${query}"
+
+                INSTRUCTIONS:
+                1. Use the google_search tool extensively to find the most recent, accurate, and authoritative data for India's trade statistics (2010-2025).
+                   - Search for official sources: Ministry of Commerce, RBI, World Bank, IMF, UNCTAD, etc.
+                   - Look for sector-specific data, commodity breakdowns, and regional trade patterns.
+                   - Cross-verify data points across multiple sources for accuracy.
+
+                2. DATA REQUIREMENTS:
+                   - Total trade volume (Imports + Exports) in USD Billions
+                   - Peak year with the highest trade activity
+                   - Trade balance (clearly state "Surplus ($XXB)" or "Deficit ($XXB)")
+                   - Yearly breakdown of imports and exports for 2010-2025
+                   - Top 5-6 trading sectors with values and percentages
+                   - Year-over-year growth rates for trend analysis
+                   - Overall growth rate as a percentage
+
+                3. EXECUTIVE SUMMARY (3-4 compelling sentences):
+                   - Explain the *why* behind trends: What drove peaks? What caused declines?
+                   - Reference specific events: COVID-19 impact, oil price shocks, policy changes (Make in India, GST), global recessions, trade wars, etc.
+                   - Highlight key sectors: Electronics, Petroleum, Gems, Pharma, Engineering, Agriculture
+                   - Tell a coherent story of India's trade evolution and positioning in global markets
+                   - Use precise data points and percentages to support your narrative
+
+                4. QUALITY STANDARDS:
+                   - Ensure all numbers are realistic and consistent across all fields
+                   - Verify that imports + exports trends match the stated balance
+                   - Make sure sector percentages add up to approximately 70-80% (top sectors)
+                   - Year-over-year changes should reflect actual historical events
+                   - Growth rates should align with the chart data provided
+
+                5. CONTEXT AWARENESS:
+                   - If query mentions specific commodities/sectors, emphasize those in topSectors
+                   - If query asks about specific years, highlight those in the summary
+                   - Tailor the analysis to answer the user's specific question comprehensively
+
+                OUTPUT: Return structured JSON with all required fields populated based on search findings.
               `
             }
           ]
@@ -128,7 +191,33 @@ export async function analyzeTradeQuery(query: string): Promise<TradeData> {
         { year: "2022", exports: 450, imports: 710 },
         { year: "2023", exports: 430, imports: 680 },
         { year: "2024", exports: 450, imports: 720 },
-      ]
+      ],
+      // Optional enhanced data for visualizations
+      topSectors: [
+        { name: "Petroleum", value: 180, percentage: 24 },
+        { name: "Electronics", value: 150, percentage: 20 },
+        { name: "Machinery", value: 120, percentage: 16 },
+        { name: "Chemicals", value: 90, percentage: 12 },
+        { name: "Gems & Jewelry", value: 75, percentage: 10 },
+        { name: "Pharmaceuticals", value: 60, percentage: 8 },
+      ],
+      growthRate: "+8.5%",
+      yearOverYearChange: [
+        { year: "2011", change: 28.5 },
+        { year: "2012", change: 2.5 },
+        { year: "2013", change: -5.2 },
+        { year: "2014", change: 3.8 },
+        { year: "2015", change: -17.5 },
+        { year: "2016", change: -0.8 },
+        { year: "2017", change: 18.5 },
+        { year: "2018", change: 10.5 },
+        { year: "2019", change: -4.3 },
+        { year: "2020", change: -17.8 },
+        { year: "2021", change: 56.1 },
+        { year: "2022", change: 12.6 },
+        { year: "2023", change: -4.1 },
+        { year: "2024", change: 5.9 },
+      ],
     };
   }
 }

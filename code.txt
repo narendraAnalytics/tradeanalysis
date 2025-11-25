@@ -46,3 +46,13 @@ async function main() {
 }
 
 main();
+
+
+
+
+ Add more visualizations (pie charts, bar charts, trend indicators) ✔
+     Enhance the dashboard with additional chart types and advanced analytics features
+  2. Improve data capabilities (filtering, date ranges, commodity breakdown)
+     Add filters, custom date range selection, and commodity-specific analysis
+  3. Export & sharing features (PDF reports, CSV downloads, share links)
+     Enable users to export dashboards as PDFs, download data as CSV, or share analysis via links
