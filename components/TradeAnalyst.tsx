@@ -440,7 +440,7 @@ export function TradeAnalyst() {
                                         className={`px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-md ${
                                             activeView === 'historical'
                                                 ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-indigo-500/30'
-                                                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-indigo-300'
+                                                : 'bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-orange-500/30 hover:shadow-orange-500/50'
                                         }`}
                                     >
                                         📊 Historical Analysis
@@ -453,7 +453,7 @@ export function TradeAnalyst() {
                                         className={`px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-md ${
                                             activeView === 'predictions'
                                                 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-purple-500/30'
-                                                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-purple-300'
+                                                : 'bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-orange-500/30 hover:shadow-orange-500/50'
                                         }`}
                                     >
                                         🤖 AI Predictions
