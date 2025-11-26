@@ -429,7 +429,12 @@ export function TradeAnalyst() {
                                     </div>
                                 </div>
 
-                                <TradeDashboard data={activeData} />
+                                <TradeDashboard
+                                    data={activeData}
+                                    yearFrom={appliedFilters?.yearFrom}
+                                    yearTo={appliedFilters?.yearTo}
+                                    selectedSectors={appliedFilters?.sectors}
+                                />
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center px-8">

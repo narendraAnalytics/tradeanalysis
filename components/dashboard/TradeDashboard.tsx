@@ -10,9 +10,12 @@ import { motion } from 'framer-motion';
 
 interface TradeDashboardProps {
     data: TradeData;
+    yearFrom?: string;
+    yearTo?: string;
+    selectedSectors?: string[];
 }
 
-export function TradeDashboard({ data }: TradeDashboardProps) {
+export function TradeDashboard({ data, yearFrom, yearTo, selectedSectors }: TradeDashboardProps) {
     const isSurplus = data.stats.balance.toLowerCase().includes('surplus');
 
     return (
@@ -41,7 +44,12 @@ export function TradeDashboard({ data }: TradeDashboardProps) {
             </div>
 
             {/* Existing Trade Chart */}
-            <TradeChart data={data.chartData} />
+            <TradeChart
+                data={data.chartData}
+                yearFrom={yearFrom}
+                yearTo={yearTo}
+                selectedSectors={selectedSectors}
+            />
 
             {/* NEW: Trend Metrics */}
             {(data.growthRate || data.yearOverYearChange) && (

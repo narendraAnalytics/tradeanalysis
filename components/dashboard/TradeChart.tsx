@@ -9,9 +9,41 @@ interface TradeChartProps {
         exports: number;
         imports: number;
     }[];
+    yearFrom?: string;
+    yearTo?: string;
+    selectedSectors?: string[];
 }
 
-export function TradeChart({ data }: TradeChartProps) {
+export function TradeChart({ data, yearFrom, yearTo, selectedSectors }: TradeChartProps) {
+    // Filter data by year range
+    const filteredData = data.filter(item => {
+        if (!yearFrom || !yearTo) return true;
+        const year = parseInt(item.year);
+        const fromYear = parseInt(yearFrom);
+        const toYear = parseInt(yearTo);
+        return year >= fromYear && year <= toYear;
+    });
+
+    // Generate dynamic title
+    const generateTitle = () => {
+        let title = 'Trade Volume Trends';
+        if (selectedSectors && selectedSectors.length > 0) {
+            if (selectedSectors.length === 1) {
+                title += ` - ${selectedSectors[0]}`;
+            } else if (selectedSectors.length <= 3) {
+                title += ` - ${selectedSectors.join(', ')}`;
+            } else {
+                title += ` - ${selectedSectors.length} Sectors`;
+            }
+        }
+        return title;
+    };
+
+    const generateSubtitle = () => {
+        const from = yearFrom || '2010';
+        const to = yearTo || '2025';
+        return `Historical performance (${from}-${to})`;
+    };
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -45,14 +77,14 @@ export function TradeChart({ data }: TradeChartProps) {
 
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h3 className="text-xl font-bold text-slate-900">Trade Volume Trends</h3>
-                    <p className="text-sm text-slate-500">Historical performance (2010-2025)</p>
+                    <h3 className="text-xl font-bold text-slate-900">{generateTitle()}</h3>
+                    <p className="text-sm text-slate-500">{generateSubtitle()}</p>
                 </div>
             </div>
 
             <ResponsiveContainer width="100%" height="85%">
                 <AreaChart
-                    data={data}
+                    data={filteredData}
                     margin={{
                         top: 10,
                         right: 10,
