@@ -4,6 +4,7 @@ import React, { useActionState, useRef, useEffect, useOptimistic, startTransitio
 import { Send, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X, Loader2 } from 'lucide-react';
 import { analyzeTradeData, ChatState, Message, generateQueryFromFiltersAction } from '@/app/actions';
 import { TradeDashboard } from './dashboard/TradeDashboard';
+import { InsightsDashboard } from './dashboard/InsightsDashboard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TradeData } from '@/lib/gemini';
 import Image from 'next/image';
@@ -28,6 +29,7 @@ export function TradeAnalyst() {
     const [activeData, setActiveData] = useState<TradeData | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+    const [activeView, setActiveView] = useState<'historical' | 'predictions'>('historical');
     const [filters, setFilters] = useState<FilterValues>({
         sectors: [],
         yearFrom: '2010',
@@ -413,7 +415,7 @@ export function TradeAnalyst() {
                                 exit={{ opacity: 0, scale: 1.04, filter: 'blur(4px)' }}
                                 transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
                             >
-                                <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center justify-between mb-6">
                                     <div>
                                         <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent tracking-tight">
                                             Trade Insights
@@ -429,12 +431,64 @@ export function TradeAnalyst() {
                                     </div>
                                 </div>
 
-                                <TradeDashboard
-                                    data={activeData}
-                                    yearFrom={appliedFilters?.yearFrom}
-                                    yearTo={appliedFilters?.yearTo}
-                                    selectedSectors={appliedFilters?.sectors}
-                                />
+                                {/* Tab Switcher */}
+                                <div className="flex items-center gap-3 mb-8">
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => setActiveView('historical')}
+                                        className={`px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-md ${
+                                            activeView === 'historical'
+                                                ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-indigo-500/30'
+                                                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-indigo-300'
+                                        }`}
+                                    >
+                                        📊 Historical Analysis
+                                    </motion.button>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => setActiveView('predictions')}
+                                        className={`px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-md ${
+                                            activeView === 'predictions'
+                                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-purple-500/30'
+                                                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-purple-300'
+                                        }`}
+                                    >
+                                        🤖 AI Predictions
+                                    </motion.button>
+                                </div>
+
+                                {/* Conditional Rendering Based on Active View */}
+                                <AnimatePresence mode="wait">
+                                    {activeView === 'historical' ? (
+                                        <motion.div
+                                            key="historical"
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 20 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <TradeDashboard
+                                                data={activeData}
+                                                yearFrom={appliedFilters?.yearFrom}
+                                                yearTo={appliedFilters?.yearTo}
+                                                selectedSectors={appliedFilters?.sectors}
+                                            />
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            key="predictions"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <InsightsDashboard data={activeData} />
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center px-8">
