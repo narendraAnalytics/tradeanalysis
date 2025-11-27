@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import { BannerEffects } from "@/components/landing/BannerEffects";
 import Image from "next/image";
 
 export default function LandingPage() {
@@ -17,6 +18,8 @@ export default function LandingPage() {
         />
         {/* Subtle overlay to reduce brightness */}
         <div className="absolute inset-0 bg-black/10" />
+        {/* Animated lighting effects */}
+        <BannerEffects />
       </div>
 
       {/* Navigation */}
