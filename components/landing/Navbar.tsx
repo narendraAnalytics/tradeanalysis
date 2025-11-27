@@ -11,7 +11,7 @@ export function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="absolute top-0 left-0 right-0 z-50 backdrop-blur-xl bg-transparent border-none shadow-none"
+      className="sticky top-0 z-50 border-none shadow-none"
     >
       <div className="w-full px-8 py-4 border-none">
         <div className="flex items-center justify-between relative">
@@ -20,7 +20,7 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-3"
           >
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl">
               <Image
                 src="/images/tradeicon.png"
                 alt="Trade Icon"
@@ -37,14 +37,16 @@ export function Navbar() {
             </div>
           </motion.div>
 
-          {/* Center Navigation Icons */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+          {/* Right Side: Navigation Icons + Dashboard */}
+          <div className="flex items-center gap-4">
+            {/* Navigation Icons */}
+            <div className="flex items-center gap-1">
             {/* Features Icon */}
             <motion.a
               href="#features"
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+              className="group relative p-3.5 transition-all cursor-pointer"
             >
               <Image
                 src="/images/FeaturesIcon.png"
@@ -63,7 +65,7 @@ export function Navbar() {
               href="#about"
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+              className="group relative p-3.5 transition-all cursor-pointer"
             >
               <Image
                 src="/images/AboutIcon.png"
@@ -82,7 +84,7 @@ export function Navbar() {
               href="#contact"
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+              className="group relative p-3.5 transition-all cursor-pointer"
             >
               <Image
                 src="/images/contactIcon.png"
@@ -95,18 +97,19 @@ export function Navbar() {
                 Contact
               </span>
             </motion.a>
-          </div>
+            </div>
 
-          {/* Dashboard Button */}
-          <motion.a
-            href="/dashboard"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-          >
-            <Sparkles size={16} />
-            Dashboard
-          </motion.a>
+            {/* Dashboard Button */}
+            <motion.a
+              href="/dashboard"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+            >
+              <Sparkles size={16} />
+              Dashboard
+            </motion.a>
+          </div>
         </div>
       </div>
     </motion.nav>
