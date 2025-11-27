@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useActionState, useRef, useEffect, useOptimistic, startTransition, useState } from 'react';
-import { Send, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X, Loader2 } from 'lucide-react';
+import { Send, Sparkles, LayoutDashboard, History, Menu, TrendingUp, ChevronLeft, ChevronRight, SlidersHorizontal, X, Loader2, Home } from 'lucide-react';
 import { analyzeTradeData, ChatState, Message, generateQueryFromFiltersAction } from '@/app/actions';
 import { TradeDashboard } from './dashboard/TradeDashboard';
 import { InsightsDashboard } from './dashboard/InsightsDashboard';
@@ -397,6 +397,23 @@ export function TradeAnalyst() {
                     {sidebarOpen ? <ChevronLeft size={20} strokeWidth={2.5} /> : <ChevronRight size={20} strokeWidth={2.5} />}
                 </motion.div>
             </motion.button>
+
+            {/* Floating Home Button */}
+            <Tooltip content="Click Back to Landing Page">
+                <motion.a
+                    href="/"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="fixed left-4 top-20 z-30 p-3 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 transition-all glow-effect"
+                >
+                    <motion.div
+                        whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Home size={20} strokeWidth={2.5} />
+                    </motion.div>
+                </motion.a>
+            </Tooltip>
 
             {/* Right Canvas - Insight Deck */}
             <div className="flex-1 relative overflow-hidden flex flex-col bg-slate-50/50">

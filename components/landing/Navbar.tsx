@@ -1,0 +1,114 @@
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
+
+export function Navbar() {
+  return (
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="absolute top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/20 shadow-none"
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between relative">
+          {/* Logo Section */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center gap-3"
+          >
+            <div className="p-2.5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl shadow-lg">
+              <Image
+                src="/images/tradeicon.png"
+                alt="Trade Icon"
+                width={28}
+                height={28}
+                className="opacity-90"
+              />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                India Trade
+              </h1>
+              <p className="text-xs text-slate-500 font-semibold">AI-Powered Analysis</p>
+            </div>
+          </motion.div>
+
+          {/* Center Navigation Icons */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1">
+            {/* Features Icon */}
+            <motion.a
+              href="#features"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+            >
+              <Image
+                src="/images/FeaturesIcon.png"
+                alt="Features"
+                width={50}
+                height={50}
+                className="relative z-10"
+              />
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-cyan-400 via-blue-400 to-orange-500 bg-clip-text text-transparent text-sm font-bold whitespace-nowrap transition-all duration-300 pointer-events-none">
+                Features
+              </span>
+            </motion.a>
+
+            {/* About Icon */}
+            <motion.a
+              href="#about"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+            >
+              <Image
+                src="/images/AboutIcon.png"
+                alt="About"
+                width={50}
+                height={50}
+                className="relative z-10"
+              />
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-cyan-400 via-blue-400 to-orange-500 bg-clip-text text-transparent text-sm font-bold whitespace-nowrap transition-all duration-300 pointer-events-none">
+                About
+              </span>
+            </motion.a>
+
+            {/* Contact Icon */}
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3.5 rounded-2xl hover:bg-white/30 transition-all cursor-pointer"
+            >
+              <Image
+                src="/images/contactIcon.png"
+                alt="Contact"
+                width={50}
+                height={50}
+                className="relative z-10"
+              />
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-cyan-400 via-blue-400 to-orange-500 bg-clip-text text-transparent text-sm font-bold whitespace-nowrap transition-all duration-300 pointer-events-none">
+                Contact
+              </span>
+            </motion.a>
+          </div>
+
+          {/* Dashboard Button */}
+          <motion.a
+            href="/dashboard"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+          >
+            <Sparkles size={16} />
+            Dashboard
+          </motion.a>
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
