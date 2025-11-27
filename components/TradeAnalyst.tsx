@@ -10,6 +10,7 @@ import { TradeData } from '@/lib/gemini';
 import Image from 'next/image';
 import { FilterPanel, FilterValues } from './filters/FilterPanel';
 import { Tooltip } from './ui/Tooltip';
+import { ExportButton } from './ExportButton';
 
 const initialState: ChatState = {
     messages: [{
@@ -42,6 +43,7 @@ export function TradeAnalyst() {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
+    const dashboardRef = useRef<HTMLDivElement>(null);
 
     // Update active data when a new message with data arrives
     useEffect(() => {
@@ -422,12 +424,19 @@ export function TradeAnalyst() {
                                         </h2>
                                         <p className="text-slate-600 mt-2 font-semibold">Real-time analysis powered by AI</p>
                                     </div>
-                                    <div className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 text-xs font-bold text-emerald-700 shadow-lg backdrop-blur-sm flex items-center gap-2.5">
-                                        <span className="relative flex h-2.5 w-2.5">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                                        </span>
-                                        Live Data
+                                    <div className="flex items-center gap-3">
+                                        <div className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 text-xs font-bold text-emerald-700 shadow-lg backdrop-blur-sm flex items-center gap-2.5">
+                                            <span className="relative flex h-2.5 w-2.5">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                            </span>
+                                            Live Data
+                                        </div>
+                                        <ExportButton
+                                            contentRef={dashboardRef}
+                                            activeView={activeView}
+                                            disabled={!activeData}
+                                        />
                                     </div>
                                 </div>
 
@@ -461,34 +470,36 @@ export function TradeAnalyst() {
                                 </div>
 
                                 {/* Conditional Rendering Based on Active View */}
-                                <AnimatePresence mode="wait">
-                                    {activeView === 'historical' ? (
-                                        <motion.div
-                                            key="historical"
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 20 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <TradeDashboard
-                                                data={activeData}
-                                                yearFrom={appliedFilters?.yearFrom}
-                                                yearTo={appliedFilters?.yearTo}
-                                                selectedSectors={appliedFilters?.sectors}
-                                            />
-                                        </motion.div>
-                                    ) : (
-                                        <motion.div
-                                            key="predictions"
-                                            initial={{ opacity: 0, x: 20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: -20 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <InsightsDashboard data={activeData} />
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                <div ref={dashboardRef} id="dashboard-content">
+                                    <AnimatePresence mode="wait">
+                                        {activeView === 'historical' ? (
+                                            <motion.div
+                                                key="historical"
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 20 }}
+                                                transition={{ duration: 0.3 }}
+                                            >
+                                                <TradeDashboard
+                                                    data={activeData}
+                                                    yearFrom={appliedFilters?.yearFrom}
+                                                    yearTo={appliedFilters?.yearTo}
+                                                    selectedSectors={appliedFilters?.sectors}
+                                                />
+                                            </motion.div>
+                                        ) : (
+                                            <motion.div
+                                                key="predictions"
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -20 }}
+                                                transition={{ duration: 0.3 }}
+                                            >
+                                                <InsightsDashboard data={activeData} />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-center px-8">
