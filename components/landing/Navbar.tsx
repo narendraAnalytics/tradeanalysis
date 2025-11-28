@@ -22,15 +22,13 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-3"
           >
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl">
-              <Image
-                src="/images/tradeicon.png"
-                alt="Trade Icon"
-                width={28}
-                height={28}
-                className="opacity-90"
-              />
-            </div>
+            <Image
+              src="/images/logo.png"
+              alt="India Trade Logo"
+              width={100}
+              height={100}
+              className="rounded-lg"
+            />
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                 India Trade

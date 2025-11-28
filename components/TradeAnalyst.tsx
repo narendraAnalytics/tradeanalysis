@@ -230,7 +230,7 @@ export function TradeAnalyst() {
                                     : 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/20'}
                             `}>
                                 {msg.role === 'assistant' ? (
-                                    <Image src="/images/tradeicon.png" alt="Trade AI" width={20} height={20} className="opacity-75" />
+                                    <Image src="/images/logo.png" alt="Trade AI" width={24} height={24} className="brightness-90" />
                                 ) : (
                                     <Image src="/images/rupee.png" alt="User" width={20} height={20} className="opacity-75" />
                                 )}
@@ -272,7 +272,7 @@ export function TradeAnalyst() {
                             className="flex gap-3.5"
                         >
                             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/30 glow-effect">
-                                <Image src="/images/tradeicon.png" alt="Trade AI" width={20} height={20} className="opacity-75 animate-pulse" />
+                                <Image src="/images/logo.png" alt="Trade AI" width={24} height={24} className="brightness-90 animate-pulse" />
                             </div>
                             <div className="px-5 py-3.5 rounded-2xl bg-white/90 border border-indigo-100 shadow-lg rounded-tl-md text-sm text-slate-600 flex items-center gap-2.5">
                                 <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-bounce" style={{ animationDelay: '0ms' }} />
