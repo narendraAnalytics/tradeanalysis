@@ -16,15 +16,17 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Banner Background Image */}
+      {/* Banner Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <Image
-          src="/images/BannerImage.png"
-          alt="India Trade Analysis Banner"
-          fill
-          className="object-contain object-top brightness-95"
-          priority
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-contain object-top brightness-95"
+        >
+          <source src="/images/BannerVideo.mp4" type="video/mp4" />
+        </video>
         {/* Subtle overlay to reduce brightness */}
         <div className="absolute inset-0 bg-black/10" />
         {/* Animated lighting effects */}
