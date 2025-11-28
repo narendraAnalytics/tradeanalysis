@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { BannerEffects } from "@/components/landing/BannerEffects";
 import Image from "next/image";
 import { useUser } from "@stackframe/stack";
+import { Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
   const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="min-h-screen relative">
@@ -49,13 +53,26 @@ export default function LandingPage() {
               </a>
             </div>
           ) : (
-            <div className="pt-20">
-              <a
+            <div className="pt-12">
+              <motion.a
                 href="/handler/sign-in"
-                className="inline-block px-8 py-5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                onClick={() => setIsLoading(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-8 py-5 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all"
               >
+                <motion.div
+                  animate={isLoading ? { rotate: 360 } : { rotate: 0 }}
+                  transition={{
+                    duration: 1,
+                    repeat: isLoading ? Infinity : 0,
+                    ease: "linear"
+                  }}
+                >
+                  <Sparkles size={20} />
+                </motion.div>
                 Launch Dashboard
-              </a>
+              </motion.a>
             </div>
           )}
         </div>
