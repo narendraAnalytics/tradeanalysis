@@ -1,6 +1,12 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__stack-auth__search_docs",
+      "mcp__stack-auth__get_docs_by_id"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "stack-auth"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

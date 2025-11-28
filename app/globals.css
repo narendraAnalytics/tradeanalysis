@@ -188,3 +188,89 @@ body {
 .sector-color-5 {
   background-color: #eab308; /* Yellow */
 }
+
+/* Stack Auth Custom Styling - Force Bright Text Colors */
+/* Target auth page wrapper and all text elements */
+#stack-handler h1,
+#stack-handler h2,
+#stack-handler h3,
+#stack-handler h4,
+#stack-handler h5,
+#stack-handler h6,
+[class*="stack"] h1,
+[class*="stack"] h2,
+[class*="stack"] h3,
+[class*="Stack"] h1,
+[class*="Stack"] h2,
+[class*="Stack"] h3 {
+  color: hsl(16, 100%, 50%) !important; /* Bright orange-red for headings */
+  font-weight: 700 !important;
+}
+
+#stack-handler p,
+#stack-handler span,
+#stack-handler label,
+#stack-handler a,
+[class*="stack"] p,
+[class*="stack"] span,
+[class*="stack"] label,
+[class*="Stack"] p,
+[class*="Stack"] span,
+[class*="Stack"] label {
+  color: hsl(24, 95%, 45%) !important; /* Bright orange for text */
+}
+
+#stack-handler a,
+[class*="stack"] a,
+[class*="Stack"] a {
+  color: hsl(24, 100%, 50%) !important; /* Bright orange for links */
+  font-weight: 600 !important;
+}
+
+#stack-handler a:hover,
+[class*="stack"] a:hover,
+[class*="Stack"] a:hover {
+  color: hsl(16, 100%, 55%) !important; /* Brighter on hover */
+  text-decoration: underline !important;
+}
+
+/* Extremely broad override - apply to handler page */
+div[class*="handler"] h1,
+div[class*="handler"] h2,
+div[class*="handler"] h3,
+div[class*="handler"] p,
+div[class*="handler"] span:not([class*="icon"]),
+div[class*="handler"] label,
+div[class*="handler"] a {
+  color: hsl(24, 100%, 50%) !important;
+}
+
+/* Target the specific Stack Auth wrapper with maximum specificity */
+#stack-auth-wrapper * {
+  color: hsl(24, 100%, 50%) !important;
+}
+
+#stack-auth-wrapper h1,
+#stack-auth-wrapper h2,
+#stack-auth-wrapper h3,
+#stack-auth-wrapper h4,
+#stack-auth-wrapper h5,
+#stack-auth-wrapper h6 {
+  color: hsl(16, 100%, 50%) !important;
+  font-weight: 700 !important;
+}
+
+#stack-auth-wrapper a {
+  color: hsl(24, 100%, 55%) !important;
+  font-weight: 600 !important;
+}
+
+#stack-auth-wrapper a:hover {
+  color: hsl(16, 100%, 60%) !important;
+  text-decoration: underline !important;
+}
+
+/* Target button text specifically */
+#stack-auth-wrapper button {
+  font-weight: 600 !important;
+}
