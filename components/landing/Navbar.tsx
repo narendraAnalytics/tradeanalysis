@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, LogIn } from 'lucide-react';
+import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import { useUser } from '@stackframe/stack';
 
@@ -103,16 +103,27 @@ export function Navbar() {
 
             {/* Conditional Auth Button */}
             {user ? (
-              // Show Dashboard button when user is logged in
-              <motion.a
-                href="/dashboard"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-              >
-                <Sparkles size={16} />
-                Dashboard
-              </motion.a>
+              // Show Dashboard and Sign Out buttons when user is logged in
+              <div className="flex items-center gap-3">
+                <motion.a
+                  href="/dashboard"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <Sparkles size={16} />
+                  Dashboard
+                </motion.a>
+                <motion.button
+                  onClick={() => user.signOut()}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-red-500 via-rose-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                >
+                  <LogOut size={16} />
+                  Sign Out
+                </motion.button>
+              </div>
             ) : (
               // Show Sign In button when user is NOT logged in
               <motion.a

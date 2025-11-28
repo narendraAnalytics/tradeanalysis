@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Roboto } from "next/font/google";
 import "./globals.css";
 import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackClientApp } from "@/lib/stack/client";
+import { stackClientApp } from "../stack/client";
 
 const outfit = Outfit({
   subsets: ["latin"],
