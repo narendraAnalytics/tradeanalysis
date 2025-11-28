@@ -43,6 +43,25 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             {/* Navigation Icons */}
             <div className="flex items-center gap-1">
+            {/* Home Icon */}
+            <motion.a
+              href="#"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative p-3.5 transition-all cursor-pointer"
+            >
+              <Image
+                src="/images/homeIcon.png"
+                alt="Home"
+                width={40}
+                height={40}
+                className="relative z-10"
+              />
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-cyan-400 via-blue-400 to-orange-500 bg-clip-text text-transparent text-sm font-bold whitespace-nowrap transition-all duration-300 pointer-events-none">
+                Home
+              </span>
+            </motion.a>
+
             {/* Features Icon */}
             <motion.a
               href="#features"
