@@ -10,7 +10,7 @@
 import { db } from '@/db';
 import { savedAnalyses } from '@/db/schema';
 import { stackServerApp } from '@/stack/server';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, sql } from 'drizzle-orm';
 import {
   CreateAnalysisInput,
   UpdateAnalysisInput,
@@ -306,7 +306,7 @@ export async function incrementViewCount(id: string): Promise<void> {
   await db
     .update(savedAnalyses)
     .set({
-      viewCount: (savedAnalyses.viewCount ?? 0) + 1,
+      viewCount: sql`COALESCE(${savedAnalyses.viewCount}, 0) + 1`,
     })
     .where(and(eq(savedAnalyses.id, id), eq(savedAnalyses.userId, user.id)));
 }

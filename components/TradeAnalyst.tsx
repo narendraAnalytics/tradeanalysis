@@ -163,24 +163,53 @@ export function TradeAnalyst() {
                 className="flex flex-col glass-panel relative z-20 overflow-hidden"
             >
                 {/* Header with Vibrant Gradient */}
-                <div className="relative p-6 border-b border-white/30 flex items-center gap-4 gradient-header overflow-hidden">
+                <div className="relative p-6 border-b border-white/30 gradient-header overflow-hidden">
                     {/* Animated gradient background */}
                     <div className="absolute inset-0 gradient-animated opacity-30"></div>
 
-                    <div className="relative p-3 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl text-white shadow-lg glow-effect">
-                        <Sparkles size={24} className="animate-pulse" />
+                    <div className="relative flex items-center gap-4">
+                        <div className="p-3 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl text-white shadow-lg glow-effect">
+                            <Sparkles size={24} className="animate-pulse" />
+                        </div>
+                        <div className="flex-1">
+                            <h1 className="font-bold text-2xl tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                                Trade Agent
+                            </h1>
+                            <p className="text-xs font-semibold text-slate-600 mt-0.5 flex items-center gap-1.5">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                </span>
+                                Powered by Gemini 3 Pro
+                            </p>
+                        </div>
                     </div>
-                    <div className="relative flex-1">
-                        <h1 className="font-bold text-2xl tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                            Trade Agent
-                        </h1>
-                        <p className="text-xs font-semibold text-slate-600 mt-0.5 flex items-center gap-1.5">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            Powered by Gemini 3 Pro
-                        </p>
+
+                    {/* Navigation Buttons */}
+                    <div className="relative flex items-center gap-2 mt-4">
+                        <Tooltip content="Back to Landing Page">
+                            <motion.a
+                                href="/"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 text-white rounded-xl shadow-lg hover:shadow-orange-500/40 transition-all font-semibold text-sm"
+                            >
+                                <Home size={18} strokeWidth={2.5} />
+                                <span>Home</span>
+                            </motion.a>
+                        </Tooltip>
+
+                        <Tooltip content="View Saved Analyses">
+                            <motion.a
+                                href="/dashboard/saved"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 text-white rounded-xl shadow-lg hover:shadow-emerald-500/40 transition-all font-semibold text-sm"
+                            >
+                                <History size={18} strokeWidth={2.5} />
+                                <span>Saved</span>
+                            </motion.a>
+                        </Tooltip>
                     </div>
                 </div>
 
@@ -397,23 +426,6 @@ export function TradeAnalyst() {
                     {sidebarOpen ? <ChevronLeft size={20} strokeWidth={2.5} /> : <ChevronRight size={20} strokeWidth={2.5} />}
                 </motion.div>
             </motion.button>
-
-            {/* Floating Home Button */}
-            <Tooltip content="Click Back to Landing Page">
-                <motion.a
-                    href="/"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="fixed left-4 top-20 z-30 p-3 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 transition-all glow-effect"
-                >
-                    <motion.div
-                        whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Home size={20} strokeWidth={2.5} />
-                    </motion.div>
-                </motion.a>
-            </Tooltip>
 
             {/* Right Canvas - Insight Deck */}
             <div className="flex-1 relative overflow-hidden flex flex-col bg-slate-50/50">
