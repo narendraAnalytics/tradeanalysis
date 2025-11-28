@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Outfit, Roboto } from "next/font/google";
 import "./globals.css";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackClientApp } from "@/lib/stack/client";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -33,7 +35,11 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${roboto.variable} antialiased`}
       >
-        {children}
+        <StackProvider app={stackClientApp}>
+          <StackTheme>
+            {children}
+          </StackTheme>
+        </StackProvider>
       </body>
     </html>
   );

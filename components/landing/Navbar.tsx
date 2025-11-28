@@ -2,10 +2,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, LogIn } from 'lucide-react';
 import Image from 'next/image';
+import { useUser } from '@stackframe/stack';
 
 export function Navbar() {
+  const user = useUser();
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -99,16 +101,30 @@ export function Navbar() {
             </motion.a>
             </div>
 
-            {/* Dashboard Button */}
-            <motion.a
-              href="/dashboard"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-            >
-              <Sparkles size={16} />
-              Dashboard
-            </motion.a>
+            {/* Conditional Auth Button */}
+            {user ? (
+              // Show Dashboard button when user is logged in
+              <motion.a
+                href="/dashboard"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Sparkles size={16} />
+                Dashboard
+              </motion.a>
+            ) : (
+              // Show Sign In button when user is NOT logged in
+              <motion.a
+                href="/handler/sign-in"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <LogIn size={16} />
+                Sign In
+              </motion.a>
+            )}
           </div>
         </div>
       </div>
