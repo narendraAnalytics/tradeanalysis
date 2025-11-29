@@ -5,6 +5,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { AboutSection } from "@/components/landing/AboutSection";
+import { ContactSection } from "@/components/landing/ContactSection";
 import { BannerEffects } from "@/components/landing/BannerEffects";
 import Image from "next/image";
 import { useUser } from "@stackframe/stack";
@@ -86,6 +87,9 @@ export default function LandingPage() {
 
       {/* About & Projects Section */}
       <AboutSection />
+
+      {/* Contact Section */}
+      <ContactSection />
 
       {/* Footer */}
       <div className="relative z-10">
