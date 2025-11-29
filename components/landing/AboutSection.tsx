@@ -89,7 +89,7 @@ export function AboutSection() {
         </motion.div>
 
         {/* 3D Flip Cards Grid */}
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 justify-items-center">
           {projects.map((project, index) => {
             const Icon = project.icon;
             const isFlipped = flippedCard === project.id;
@@ -107,7 +107,7 @@ export function AboutSection() {
                 onMouseLeave={() => setFlippedCard(null)}
               >
                 <motion.div
-                  className="relative w-full h-80 cursor-pointer"
+                  className="relative w-60 h-[520px] cursor-pointer"
                   animate={{ rotateY: isFlipped ? 180 : 0 }}
                   transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
                   style={{ transformStyle: "preserve-3d" }}
@@ -115,31 +115,31 @@ export function AboutSection() {
                 >
                   {/* Front of Card */}
                   <div
-                    className="absolute inset-0 rounded-3xl bg-white/80 backdrop-blur-md border border-white/50 shadow-xl overflow-hidden"
+                    className="absolute inset-0 rounded-[2.5rem] bg-white/80 backdrop-blur-md border border-white/50 shadow-xl overflow-hidden"
                     style={{ backfaceVisibility: "hidden" }}
                   >
                     {/* Gradient Background */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${project.bgGradient}`} />
 
                     {/* Content */}
-                    <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
+                    <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
                       <motion.div
-                        className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${project.gradient} flex items-center justify-center mb-6 shadow-lg`}
+                        className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${project.gradient} flex items-center justify-center mb-8 shadow-lg`}
                         whileHover={{ scale: 1.1, rotate: 5 }}
                       >
-                        <Icon size={40} className="text-white" strokeWidth={2.5} />
+                        <Icon size={48} className="text-white" strokeWidth={2.5} />
                       </motion.div>
 
-                      <h4 className="text-2xl font-bold text-slate-800 mb-2">
+                      <h4 className="text-2xl font-bold text-slate-800 mb-3 px-2">
                         {project.name}
                       </h4>
-                      <p className="text-sm text-slate-600 font-medium">
+                      <p className="text-sm text-slate-600 font-medium px-4 leading-relaxed">
                         {project.tagline}
                       </p>
 
                       {/* Hover Indicator */}
                       <motion.div
-                        className="absolute bottom-6 text-xs text-slate-500 font-medium"
+                        className="absolute bottom-8 text-xs text-slate-500 font-medium"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: isFlipped ? 0 : 1 }}
                         transition={{ duration: 0.3 }}
@@ -151,23 +151,23 @@ export function AboutSection() {
 
                   {/* Back of Card */}
                   <div
-                    className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${project.gradient} shadow-xl overflow-hidden`}
+                    className={`absolute inset-0 rounded-[2.5rem] bg-gradient-to-br ${project.gradient} shadow-xl overflow-hidden`}
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                   >
-                    <div className="h-full flex flex-col items-center justify-center p-6 text-center text-white">
-                      <Icon size={50} className="mb-4 opacity-90" strokeWidth={2} />
+                    <div className="h-full flex flex-col items-center justify-center p-8 text-center text-white">
+                      <Icon size={56} className="mb-6 opacity-90" strokeWidth={2} />
 
-                      <h4 className="text-2xl font-bold mb-3">
+                      <h4 className="text-2xl font-bold mb-4 px-2">
                         {project.name}
                       </h4>
-                      <p className="text-sm mb-6 opacity-90 leading-relaxed">
+                      <p className="text-sm mb-8 opacity-90 leading-relaxed px-4">
                         {project.description}
                       </p>
 
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/40 rounded-xl font-semibold hover:bg-white/30 transition-all flex items-center gap-2"
+                        className="px-6 py-3 bg-white/20 backdrop-blur-md border border-white/40 rounded-2xl font-semibold hover:bg-white/30 transition-all flex items-center gap-2"
                       >
                         <ExternalLink size={18} />
                         View Project Details
