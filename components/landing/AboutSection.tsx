@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Sparkles, Camera, BookOpen, ChefHat } from 'lucide-react';
+import { X, ExternalLink, Sparkles, Camera, BookOpen, ChefHat, Wifi, Battery, Signal } from 'lucide-react';
 
 const projects = [
   {
@@ -121,8 +121,26 @@ export function AboutSection() {
                     {/* Gradient Background */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${project.bgGradient}`} />
 
+                    {/* iPhone Status Bar */}
+                    <div className="relative z-10 pt-3 px-6">
+                      <div className="flex items-center justify-between text-slate-800">
+                        {/* Left side - Time */}
+                        <span className="text-[11px] font-semibold">13:15</span>
+
+                        {/* Center - iPhone Notch */}
+                        <div className="absolute left-1/2 -translate-x-1/2 top-0 w-28 h-7 bg-black rounded-b-3xl"></div>
+
+                        {/* Right side - Icons */}
+                        <div className="flex items-center gap-1">
+                          <Signal size={12} strokeWidth={2.5} />
+                          <Wifi size={12} strokeWidth={2.5} />
+                          <Battery size={12} strokeWidth={2.5} />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Content */}
-                    <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
+                    <div className="relative h-full flex flex-col items-center justify-center p-8 pt-4 text-center">
                       <motion.div
                         className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${project.gradient} flex items-center justify-center mb-8 shadow-lg`}
                         whileHover={{ scale: 1.1, rotate: 5 }}
@@ -139,13 +157,16 @@ export function AboutSection() {
 
                       {/* Hover Indicator */}
                       <motion.div
-                        className="absolute bottom-8 text-xs text-slate-500 font-medium"
+                        className="absolute bottom-14 text-xs text-slate-500 font-medium"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: isFlipped ? 0 : 1 }}
                         transition={{ duration: 0.3 }}
                       >
                         Hover to flip
                       </motion.div>
+
+                      {/* iPhone Home Indicator */}
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-800/30 rounded-full"></div>
                     </div>
                   </div>
 
