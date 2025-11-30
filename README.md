@@ -1,3 +1,5 @@
+![Indian Trade Analysis Banner](public/images/BannerImage3.png)
+
 # Indian Trade Analysis Agent
 
 A Generative UI platform for querying and visualizing India's import/export data, powered by Google's Gemini models.
