@@ -23,6 +23,9 @@ It leverages **Google Search Grounding** to fetch the most recent and accurate t
 -   **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 -   **Language**: TypeScript
 -   **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+-   **Database**: [Neon](https://neon.tech/) - Serverless PostgreSQL
+-   **ORM**: [Drizzle ORM](https://orm.drizzle.team/) - Type-safe database queries
+-   **Authentication**: [Stack Auth](https://stack-auth.com/) via Neon Auth - Auto-syncing user management
 -   **AI SDKs**:
     -   `@google/genai`: Official Google GenAI SDK for Gemini API.
     -   `ai` & `@ai-sdk/google`: Vercel AI SDK for streaming and UI integration.
@@ -37,6 +40,8 @@ It leverages **Google Search Grounding** to fetch the most recent and accurate t
 
 -   Node.js 18+ installed.
 -   A Google Gemini API Key.
+-   A Neon account (https://neon.tech).
+-   Stack Auth configured via Neon Auth.
 
 ### Installation
 
@@ -49,12 +54,22 @@ It leverages **Google Search Grounding** to fetch the most recent and accurate t
 2.  Install dependencies:
     ```bash
     npm install
+    # Installs: Next.js, Drizzle ORM, Neon client, Stack Auth, and all dependencies
     ```
 
 3.  Set up environment variables:
-    Create a `.env` file in the root directory and add your Gemini API key:
+    Create a `.env` file in the root directory and add your configuration:
     ```env
-    GEMINI_API_KEY=your_api_key_here
+    # Gemini API
+    GEMINI_API_KEY=your_gemini_api_key_here
+
+    # Neon Database
+    DATABASE_URL=your_neon_database_connection_string
+
+    # Neon Auth (Stack Auth)
+    NEXT_PUBLIC_STACK_PROJECT_ID=your_neon_auth_project_id
+    NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=your_neon_auth_publishable_key
+    STACK_SECRET_SERVER_KEY=your_neon_auth_secret_key
     ```
 
 4.  Run the development server:
@@ -87,6 +102,40 @@ const result = await genAI.models.generateContent({
   },
 });
 ```
+
+## Database & Authentication
+
+### Neon PostgreSQL Database
+
+This project uses **Neon** as its serverless PostgreSQL database with **Drizzle ORM** for type-safe queries.
+
+**Database Schema:**
+-   `user_preferences` - User settings and dashboard preferences
+-   `saved_analyses` - Saved trade analysis queries and reports
+-   `trade_bookmarks` - Bookmarked trade data points
+-   `user_activity_log` - User interaction tracking
+
+### Neon Auth (Stack Auth Integration)
+
+User authentication is handled by **Stack Auth** integrated through **Neon Auth**, which automatically synchronizes user data to your PostgreSQL database.
+
+**Key Features:**
+-   Automatic user sync to `neon_auth.users_sync` table
+-   No manual webhook setup required
+-   Foreign key support with cascade deletes
+-   Real-time user profile updates
+
+**Setup:**
+1.  Enable Neon Auth in your Neon Console
+2.  Copy the Auth environment variables to your `.env` file
+3.  Run `npx @stackframe/init-stack@latest --no-browser` to set up auth routes
+4.  Users automatically appear in your database when they sign up
+
+**Auth Routes:**
+-   `/handler/sign-in` - Sign in page
+-   `/handler/sign-up` - Sign up page
+
+For detailed setup instructions, see `neuonauth_drizzle.md`.
 
 ## License
 
