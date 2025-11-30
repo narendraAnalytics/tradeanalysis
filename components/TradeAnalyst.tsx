@@ -305,7 +305,7 @@ export function TradeAnalyst() {
                                 className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 text-white text-xs font-semibold shadow-sm"
                             >
                                 {sector}
-                                <button onClick={() => removeFilter('sector', sector)} className="hover:bg-white/20 rounded p-0.5">
+                                <button onClick={() => removeFilter('sector', sector)} className="hover:bg-white/20 rounded p-0.5" aria-label={`Remove ${sector} filter`}>
                                     <X size={12} />
                                 </button>
                             </motion.div>
@@ -318,7 +318,7 @@ export function TradeAnalyst() {
                                 className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-semibold shadow-sm"
                             >
                                 {country}
-                                <button onClick={() => removeFilter('country', country)} className="hover:bg-white/20 rounded p-0.5">
+                                <button onClick={() => removeFilter('country', country)} className="hover:bg-white/20 rounded p-0.5" aria-label={`Remove ${country} filter`}>
                                     <X size={12} />
                                 </button>
                             </motion.div>
