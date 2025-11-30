@@ -9,7 +9,7 @@ import { ContactSection } from "@/components/landing/ContactSection";
 import { BannerEffects } from "@/components/landing/BannerEffects";
 import Image from "next/image";
 import { useUser } from "@stackframe/stack";
-import { Sparkles } from "lucide-react";
+import { Sparkles, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function LandingPage() {
@@ -49,12 +49,25 @@ export default function LandingPage() {
               <p className="text-base text-slate-700 mb-4">
                 Ready to analyze India's trade data?
               </p>
-              <a
+              <motion.a
                 href="/dashboard"
-                className="inline-block px-8 py-3 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                onClick={() => setIsLoading(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 px-8 py-3 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
+                <motion.div
+                  animate={isLoading ? { rotate: 360 } : { rotate: 0 }}
+                  transition={{
+                    duration: 1,
+                    repeat: isLoading ? Infinity : 0,
+                    ease: "linear"
+                  }}
+                >
+                  <TrendingUp size={20} />
+                </motion.div>
                 Trade Dashboard
-              </a>
+              </motion.a>
             </div>
           ) : (
             <div className="pt-12">

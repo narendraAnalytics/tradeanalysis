@@ -59,7 +59,7 @@ export function Footer() {
             <div className="space-y-2 text-sm text-slate-300">
               <p>Google Gemini AI</p>
               <p>Next.js 16</p>
-              <p>TensorFlow.js</p>
+              <p>Neon</p>
             </div>
           </div>
         </div>

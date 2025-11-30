@@ -43,7 +43,7 @@ export function TradeAnalyst() {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
-    const dashboardRef = useRef<HTMLDivElement>(null);
+    const dashboardRef = useRef<HTMLDivElement>(null!);
 
     // Update active data when a new message with data arrives
     useEffect(() => {
