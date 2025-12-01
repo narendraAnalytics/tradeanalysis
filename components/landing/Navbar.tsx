@@ -49,7 +49,7 @@ export function Navbar() {
               className="group relative p-3.5 transition-all cursor-pointer"
             >
               <Image
-                src="/images/homeIcon.png"
+                src="/images/homeicon.png"
                 alt="Home"
                 width={40}
                 height={40}
